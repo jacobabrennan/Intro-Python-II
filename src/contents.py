@@ -57,14 +57,21 @@ class Container:
 
 # = Containable - game objects which can be contained in other objects ========
 
-class Containable:
-    def __init__(self)
+class Containable(Container):
+    def __init__(self):
+        super().__init__()
+        self._location_resolver = None
 
     # - Location -------------------------------------
     @property
     def location(self):
-        return self._location_resolver()
+        if(self._location_resolver):
+            return self._location_resolver()
+        return None
 
     @location.setter
     def location(self, newValue):
+        if(not newValue):
+            self._location_resolver = None
+            return
         self._location_resolver = weakref.ref(newValue)
