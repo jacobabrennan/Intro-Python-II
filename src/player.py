@@ -5,6 +5,9 @@
 # currently.
 
 # - Dependencies ---------------------------------
+# Language Modules
+# Game Modules
+from config import *
 import contents
 
 
@@ -20,12 +23,15 @@ class Player(contents.containable):
         # Find current location. Cancel if not currently in a location.
         current_loc = self.location
         if(not current_loc):
-            return False
+            raise GAME_PROBLEM(MESSAGE_CANNOT_MOVE, self)
         # Attempt to get new room from current location.
         # This will fail in when self isn't located in a Room.
         try:
             new_loc = current_loc.get_exit(direction)
         except AttributeError:
-            return False
+            raise GAME_PROBLEM(MESSAGE_NO_EXIT, direction)
+        # Cancel if no exit in that direction
+        if(not new_loc):
+            raise GAME_PROBLEM(MESSAGE_NO_EXIT, direction)
         # Attempt to move into new location
         return new_loc.contain(self)

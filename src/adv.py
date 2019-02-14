@@ -1,48 +1,42 @@
+
+
+# = Create game world =========================================================
+
+# - Dependencies ---------------------------------
+# Language Modules
+# Game Modules
 from config import *
 from room import Room
 from player import Player
 from parser import Parser
 
-
-# = Create game world =========================================================
-
 # - Declare all the rooms ------------------------
 room = {
-    'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons"),
-
-    'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-passages run north and east."""),
-
-    'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
-into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm."""),
-
-    'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
-to north. The smell of gold permeates the air."""),
-
-    'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
-chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south."""),
+    NAME_PLACE_OUTSIDE:  Room(NAME_PLACE_OUTSIDE, DESCRIPTION_PLACE_OUTSIDE),
+    NAME_PLACE_FOYER:    Room(NAME_PLACE_FOYER, DESCRIPTION_PLACE_FOYER),
+    NAME_PLACE_OVERLOOK: Room(NAME_PLACE_OVERLOOK, DESCRIPTION_PLACE_OVERLOOK),
+    NAME_PLACE_NARROW:   Room(NAME_PLACE_NARROW, DESCRIPTION_PLACE_NARROW),
+    NAME_PLACE_TREASURE: Room(NAME_PLACE_TREASURE, DESCRIPTION_PLACE_TREASURE),
 }
 
 # - Link rooms together --------------------------
-room['outside'].n_to = room['foyer']
-room['foyer'].s_to = room['outside']
-room['foyer'].n_to = room['overlook']
-room['foyer'].e_to = room['narrow']
-room['overlook'].s_to = room['foyer']
-room['narrow'].w_to = room['foyer']
-room['narrow'].n_to = room['treasure']
-room['treasure'].s_to = room['narrow']
+room[NAME_PLACE_OUTSIDE].add_exit(room[NAME_PLACE_FOYER], DIRECTION_NORTH)
+room[NAME_PLACE_FOYER].add_exit(room[NAME_PLACE_OUTSIDE], DIRECTION_SOUTH)
+room[NAME_PLACE_FOYER].add_exit(room[NAME_PLACE_OVERLOOK], DIRECTION_NORTH)
+room[NAME_PLACE_FOYER].add_exit(room[NAME_PLACE_NARROW], DIRECTION_EAST)
+room[NAME_PLACE_OVERLOOK].add_exit(room[NAME_PLACE_FOYER], DIRECTION_SOUTH)
+room[NAME_PLACE_NARROW].add_exit(room[NAME_PLACE_FOYER], DIRECTION_WEST)
+room[NAME_PLACE_NARROW].add_exit(room[NAME_PLACE_TREASURE], DIRECTION_NORTH)
+room[NAME_PLACE_TREASURE].add_exit(room[NAME_PLACE_NARROW], DIRECTION_SOUTH)
 
 
 # = Main ======================================================================
-# Create client to handle interfacing with the player.
-client = Client()
+
+# Create parser to handle interfacing with the player.
+main_parser = Parser()
 # Make a new player object that is currently in the 'outside' room.
 main_player = Player()
-start_room = room['outside']
+start_room = room[NAME_PLACE_OUTSIDE]
 start_room.contain(main_player)
 
 # Write the game loop

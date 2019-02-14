@@ -3,6 +3,8 @@
 # = Item ======================================================================
 
 # - Dependencies ---------------------------------
+# Language Modules
+# Game Modules
 import contents
 
 
@@ -10,5 +12,5 @@ import contents
 class Item(contents.containable):
     def __init__(self):
         super().__init__()
-        self.name = "item"
-        self.description = "an item"
+        self.name = NAME_ITEM_DEFAULT
+        self.description = DESCRIPTION_ITEM_DEFAULT

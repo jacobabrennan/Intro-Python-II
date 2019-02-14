@@ -3,7 +3,10 @@
 # = Containers and Containables - Base movement classes =======================
 
 # - Dependencies ---------------------------------
+# Language Modules
 import weakref
+# Game Modules
+from config import *
 
 
 # = Container - game objects which can contain other objects ==================
@@ -14,24 +17,19 @@ class Container:
         self.name = None
         self.description = None
 
-    def __str__(self):
-        return self.name
-
     # - Movement -------------------------------------
     def contain(self, mover):
         """
         Attempt to place mover into contents.
-        Returns a Boolean representation of success.
+        Raises an Exception if unsuccessful.
         """
         # Check if mover can exit old location
         old_location = mover.location
-        if(not old_location):
-            return False
-        if(not old_location.allow_exit(mover)):
-            return False
+        if(old_location and (not old_location.allow_exit(mover))):
+            raise GAME_PROBLEM(PROBLEM_EXIT_DISALLOWED, mover, old_location)
         # Check if mover can enter current location
         if(not self.allow_entry(mover)):
-            return False
+            raise EXCEPTION_GAME_STATE()
         # Set new location
         if(not self.contents):
             self.contents = []

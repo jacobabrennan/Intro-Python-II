@@ -5,8 +5,10 @@
 # description attributes.
 
 # - Dependencies ---------------------------------
-import contents
+# Language Modules
+# Game Modules
 from config import *
+import contents
 
 
 # - Initialization -------------------------------
@@ -16,25 +18,14 @@ class Room(contents.Container):
         # Configure name and description
         self.name = name
         self.description = description
-        # Set exit locations to default (None)
-        self.n_to = None  # Cardinal compass directions
-        self.s_to = None
-        self.e_to = None
-        self.w_to = None
-        self.u_to = None  # Up and Down
-        self.d_to = None
+        # Setup exits
+        self.exits = {}
 
     # - Movement -------------------------------------
+    def add_exit(room, direction):
+        self.exits[direction] = room
+
     def get_exit(self, direction):
-        if(direction is DIRECTION_NORTH):
-            return self.n_to
-        if(direction is DIRECTION_SOUTH):
-            return self.s_to
-        if(direction is DIRECTION_EAST):
-            return self.e_to
-        if(direction is DIRECTION_WEST):
-            return self.w_to
-        if(direction is DIRECTION_UP):
-            return self.u_to
-        if(direction is DIRECTION_DOWN):
-            return self.d_to
+        if(not (direction in self.exits)):
+            return None
+        return self.exits[direction]
