@@ -40,6 +40,7 @@ _STRING_CODE = 0
 
 
 def _STRING_CODE_GENERATOR():
+    """Ensures each string has a unique code."""
     global _STRING_CODE
     _STRING_CODE += 64
     return _STRING_CODE
@@ -78,17 +79,20 @@ DESCRIPTION_ITEM_DEFAULT = _STRING_CODE_GENERATOR()
 
 # - Exceptions -----------------------------------
 class GAME_PROBLEM(Exception):
+    """Alerts the player to normal obstacles encountered while playing."""
     def __init__(self, problem_type, *args):
         self.problem_type = problem_type
         self.data = args
 
 
 class ERROR_NO_STRING(Exception):
+    """Raised when the language system attempt to translate a bad string."""
     pass
 
 
 # - Math -----------------------------------------
 def DIR_FLIP(direction):
+    """Rotates a direction by 180 degrees. Used in room exit linking."""
     flip_dir = 0
     if(direction & DIR_NORTH):
         flip_dir |= DIR_SOUTH

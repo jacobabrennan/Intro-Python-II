@@ -11,6 +11,7 @@ from room import Room
 
 # - Definition and Initialization ----------------
 class Map:
+    """A collection of Rooms linked by exits, and methods for managing them."""
     def __init__(self):
         self.rooms = {}
         self.load()

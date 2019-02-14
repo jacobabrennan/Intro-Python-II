@@ -33,10 +33,10 @@ class Container:
         # Check if mover can exit old location
         old_location = mover.location
         if(old_location and (not old_location.allow_exit(mover))):
-            raise GAME_PROBLEM(PROBLEM_EXIT_DISALLOWED, mover, old_location)
+            raise GAME_PROBLEM(MESSAGE_EXIT_DISALLOWED, mover, old_location)
         # Check if mover can enter current location
         if(not self.allow_entry(mover)):
-            raise EXCEPTION_GAME_STATE()
+            raise GAME_PROBLEM(MESSAGE_ENTRY_DISALLOWED, mover, self)
         # Set new location
         if(old_location):
             old_location.contents.remove(mover)

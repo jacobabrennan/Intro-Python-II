@@ -13,6 +13,11 @@ from language import languages
 # = Parser ====================================================================
 
 class Parser:
+    """
+    Command parser for accepting input from the player, and executing commands.
+    This is the main point of contact between the player and the game,
+    providing most input and output.
+    """
     def __init__(self, player):
         self.player = player
         # Set language
@@ -20,6 +25,7 @@ class Parser:
 
     # - Input / Output -------------------------------
     def input(self):
+        """Queries the system for player input, then parses it."""
         #
         try:
             player_command = input(self.get_string(CLIENT_PROMPT))
@@ -31,12 +37,21 @@ class Parser:
         self.output(result)
 
     def output(self, message):
+        """Outputs to the console the result of parsed commands."""
         for line in message:
             print(line)
         print('\n')
 
     # - Command Parsing ------------------------------
     def parse(self, command):
+        """
+        Parses command text for Verb Aliases and Object References.
+        The first word of a command is interpreted as a verb alias.
+        Subsequent words are interpreted as references to game objects or basic
+        game concepts (i.g. directions).
+        The verb is then executed, passing said references as parameters.
+        The result is then output as text to the client.
+        """
         # Split command into words
         words = command.lower().split(' ')
         verb_alias = words.pop(0)
@@ -70,6 +85,11 @@ class Parser:
         return lines
 
     def resolve_reference(self, token):
+        """
+        Returns a game object or simple game concept (i.g. direction)
+        corresponding to the provided token. Raises an exception if no such
+        game object can be found.
+        """
         language = languages[self.language]
         # Attempt to get reference from language constant (like directions)
         reference = None
@@ -88,6 +108,10 @@ class Parser:
 
     # - String Formatting ----------------------------
     def get_string(self, string_code, *args):
+        """
+        Translates the provided code and data into a string in the client's
+        language.
+        """
         # Get language dictionary
         strings = languages[self.language][LANG_STRINGS]
         # Get message for language
@@ -117,6 +141,7 @@ class Parser:
 
 
 class Verb:
+    """A command the player can execute by typing an Alias."""
     def __init__(self, key, behavior, **options):
         # Store in verbs by key for access by the parser
         global verbs

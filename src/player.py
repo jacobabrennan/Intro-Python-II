@@ -25,11 +25,11 @@ class Player(contents.Containable):
         if(not current_loc):
             raise GAME_PROBLEM(MESSAGE_CANNOT_MOVE, self)
         # Attempt to get new room from current location.
-        # This will fail in when self isn't located in a Room.
+        # This may fail as current_loc may not be a Room!
         try:
             new_loc = current_loc.get_exit(direction)
         except AttributeError:
-            raise GAME_PROBLEM(MESSAGE_NO_EXIT, direction)
+            raise GAME_PROBLEM(MESSAGE_CANNOT_MOVE, self)
         # Cancel if no exit in that direction
         if(not new_loc):
             raise GAME_PROBLEM(MESSAGE_NO_EXIT, direction)
