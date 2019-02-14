@@ -17,6 +17,13 @@ class Container:
         self.name = None
         self.description = None
 
+    def pack(self):
+        """Provides all necessary data to describe self to the client."""
+        return {
+            "name": self.name,
+            "description": self.description,
+        }
+
     # - Movement -------------------------------------
     def contain(self, mover):
         """
@@ -31,6 +38,8 @@ class Container:
         if(not self.allow_entry(mover)):
             raise EXCEPTION_GAME_STATE()
         # Set new location
+        if(old_location):
+            old_location.contents.remove(mover)
         if(not self.contents):
             self.contents = []
         self.contents.append(mover)

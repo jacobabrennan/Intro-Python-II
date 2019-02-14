@@ -31,7 +31,9 @@ class Parser:
         self.output(result)
 
     def output(self, message):
-        print(message+'\n')
+        for line in message:
+            print(line)
+        print('\n')
 
     # - Command Parsing ------------------------------
     def parse(self, command):
@@ -43,22 +45,30 @@ class Parser:
         try:
             verb_code = aliases[verb_alias]
         except KeyError:
-            return self.get_string(MESSAGE_ALIAS_UNKNOWN, verb_alias)
+            return [self.get_string(MESSAGE_ALIAS_UNKNOWN, verb_alias)]
         command_verb = verbs[verb_code]
         # Check if arguments match verb signature
         needed_args = len(signature(command_verb).parameters) - 1  # player
         if(needed_args < len(words)):
-            return self.get_string(MESSAGE_ARGUMENTS_MANY, verb_alias)
+            return [self.get_string(MESSAGE_ARGUMENTS_MANY, verb_alias)]
         elif(needed_args > len(words)):
-            return self.get_string(MESSAGE_ARGUMENTS_FEW, verb_alias)
+            return [self.get_string(MESSAGE_ARGUMENTS_FEW, verb_alias)]
         # Execute command
         try:
             references = [self.resolve_reference(word) for word in words]
-            command_verb(self.player, *references)
+            result = command_verb(self.player, *references)
         except GAME_PROBLEM as problem:
-            return self.get_string(problem.problem_type, *problem.data)
-        return "Working"
-    
+            return [self.get_string(problem.problem_type, *problem.data)]
+        # Parse Result
+        room_data = result["room"]
+        lines = [
+            self.get_string(room_data["name"]),
+            self.get_string(room_data["description"]),
+        ]
+        for content in room_data["contents"]:
+            lines.append(self.get_string(content["name"]))
+        return lines
+
     def resolve_reference(self, token):
         language = languages[self.language]
         # Attempt to get reference from language constant (like directions)

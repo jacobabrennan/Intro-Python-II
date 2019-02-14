@@ -13,6 +13,7 @@ from geography import Map
 # - Main -----------------------------------------
 # Create parser to handle interfacing with the player.
 main_player = Player()
+main_player.name = NAME_SELF
 main_parser = Parser(main_player)
 # Setup new game world
 main_map = Map()
