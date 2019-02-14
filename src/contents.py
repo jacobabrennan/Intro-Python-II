@@ -11,6 +11,11 @@ import weakref
 class Container:
     def __init__(self):
         self.contents = None
+        self.name = None
+        self.description = None
+
+    def __str__(self):
+        return self.name
 
     # - Movement -------------------------------------
     def contain(self, mover):

@@ -12,6 +12,7 @@ from config import *
 # - Initialization -------------------------------
 class Room(contents.Container):
     def __init__(self, name, description):
+        super().__init__()
         # Configure name and description
         self.name = name
         self.description = description

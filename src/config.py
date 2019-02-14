@@ -2,6 +2,13 @@
 
 # = Project Constants =========================================================
 
+# Client display
+CLIENT_PROMPT = 'Explore >>>'
+
+# Commands
+COMMAND_EXIT = 'q'
+
+# Movement
 DIRECTION_NORTH = 1
 DIRECTION_SOUTH = 2
 DIRECTION_EAST = 4
