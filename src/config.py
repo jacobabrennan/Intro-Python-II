@@ -5,9 +5,11 @@
 
 # = Simple Constants ==========================================================
 
-# - Languages ------------------------------------
+# - Language System --------------------------------
 LANGUAGE_ENGLISH = 'English'
 LANGUAGE_DEFAULT = LANGUAGE_ENGLISH
+LANG_ALIASES = 'aliases'
+LANG_STRINGS = 'strings'
 
 # - Movement -------------------------------------
 DIR_NORTH = 1
@@ -19,6 +21,8 @@ DIR_DOWN = 32
 
 # - Commands -------------------------------------
 COMMAND_EXIT = 33
+COMMAND_MOVE = 34
+COMMAND_LOOK = 35
 
 
 # = String Codes ==============================================================
@@ -29,18 +33,19 @@ _STRING_CODE = 0
 
 def _STRING_CODE_GENERATOR():
     global _STRING_CODE
-    _STRING_CODE += 1
+    _STRING_CODE += 64
     return _STRING_CODE
+
 
 # - Client Interface -----------------------------
 CLIENT_PROMPT = _STRING_CODE_GENERATOR()
 
 # - Problems (exceptions) ------------------------
+MESSAGE_ALIAS_UNKNOWN = _STRING_CODE_GENERATOR()
 MESSAGE_EXIT_DISALLOWED = _STRING_CODE_GENERATOR()
 MESSAGE_ENTRY_DISALLOWED = _STRING_CODE_GENERATOR()
 MESSAGE_CANNOT_MOVE = _STRING_CODE_GENERATOR()
 MESSAGE_NO_EXIT = _STRING_CODE_GENERATOR()
-MESSAGE_STRING_NOT_FOUND = _STRING_CODE_GENERATOR()
 
 # - Names and Descriptions -----------------------
 NAME_PLACE_OUTSIDE = _STRING_CODE_GENERATOR()
@@ -59,11 +64,15 @@ DESCRIPTION_ITEM_DEFAULT = _STRING_CODE_GENERATOR()
 
 # = Utilities =================================================================
 
-# - Problems (exceptions) ------------------------
+# - Exceptions -----------------------------------
 class GAME_PROBLEM(Exception):
     def __init__(self, problem_type, *args):
         self.problem_type = problem_type
         self.data = args
+
+
+class ERROR_NO_STRING(Exception):
+    pass
 
 
 # - Math -----------------------------------------

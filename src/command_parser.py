@@ -6,14 +6,18 @@
 # Language Modules
 # Game Modules
 from config import *
-from language import MESSAGE
+from language import languages
 
 
 # = Parser ====================================================================
 
 class Parser:
-    def __init__(self):
+    def __init__(self, player):
+        self.player = player
+        # Set language
         self.language = LANGUAGE_DEFAULT
+        # Generate verbs
+        # self.verbs = {}
 
     # - Input / Output -------------------------------
     def input(self):
@@ -33,31 +37,65 @@ class Parser:
     # - Command Parsing ------------------------------
     def parse(self, command):
         # Split command into words
-        words = command.split(' ')
-        verb = words[0]
-        # Check for exit command
-        # if(verb is COMMAND_EXIT):
-        #     exit(0)
+        words = command.lower().split(' ')
+        verb_alias = words[0]
+        # Retrieve verb by alias
+        aliases = languages[self.language][LANG_ALIASES]
+        try:
+            verb_code = aliases[verb_alias]
+        except KeyError:
+            return self.get_string(MESSAGE_ALIAS_UNKNOWN, command_verb)
+        command_verb = verbs[verb_code]
         # Execute command
         try:
-            pass
+            command_verb(self.player, *words[1:])
         except GAME_PROBLEM as problem:
-            return get_string(problem.problem_type, *problem.data)
+            return self.get_string(problem.problem_type, *problem.data)
         return "Working"
 
+    # - String Formatting ----------------------------
     def get_string(self, string_code, *args):
+        # Get language dictionary
+        strings = languages[self.language][LANG_STRINGS]
         # Get message for language
         try:
-            template = MESSAGE[self.language][string_code]
+            # Try as a string_code (int) first
+            template = strings[string_code]
         except KeyError:
-            template = MESSAGE[self.language][MESSAGE_STRING_NOT_FOUND]
-            return template.format(string_code)
+            # If that fails, try as an object with a string_code name
+            try:
+                template = strings[string_code.name]
+            # If that fails, raise a 'no string' exception
+            except AttributeError:
+                raise ERROR_NO_STRING(string_code)
+        # Format numeric args to strings
+        pass_args = []
+        for arg in args:
+            try:
+                arg_string = self.get_string(arg)
+            except ERROR_NO_STRING:
+                arg_string = arg
+            pass_args.append(arg_string)
         # Format message
-        return template.format(*args)
+        return template.format(*pass_args)
 
 
 # = Verb ======================================================================
 
+
 class Verb:
-    def __init__(self, **options):
-        pass
+    def __init__(self, key, behavior, **options):
+        # Store in verbs by key for access by the parser
+        global verbs
+        verbs[key] = self
+        # Set attributes from arguments
+        self.key = key
+        self.behavior = behavior
+
+    def __call__(self, player, *args):
+        return self.behavior(player, *args)
+
+
+verbs = {}
+
+Verb(COMMAND_MOVE, lambda player, *args: player.move(*args))

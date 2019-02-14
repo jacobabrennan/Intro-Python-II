@@ -9,6 +9,6 @@ from config import *
 import langenglish
 
 # - Language Dictionaries ------------------------
-MESSAGE = {
-    LANGUAGE_ENGLISH: langenglish.messages,
+languages = {
+    LANGUAGE_ENGLISH: langenglish.language,
 }
