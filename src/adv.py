@@ -1,7 +1,12 @@
+from config import *
 from room import Room
+from player import Player
+from parser import Parser
 
-# Declare all the rooms
 
+# = Create game world =========================================================
+
+# - Declare all the rooms ------------------------
 room = {
     'outside':  Room("Outside Cave Entrance",
                      "North of you, the cave mount beckons"),
@@ -21,9 +26,7 @@ chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 }
 
-
-# Link rooms together
-
+# - Link rooms together --------------------------
 room['outside'].n_to = room['foyer']
 room['foyer'].s_to = room['outside']
 room['foyer'].n_to = room['overlook']
@@ -33,19 +36,17 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
-#
-# Main
-#
 
+# = Main ======================================================================
+# Create client to handle interfacing with the player.
+client = Client()
 # Make a new player object that is currently in the 'outside' room.
+main_player = Player()
+start_room = room['outside']
+start_room.contain(main_player)
 
-# Write a loop that:
-#
-# * Prints the current room name
-# * Prints the current description (the textwrap module might be useful here).
-# * Waits for user input and decides what to do.
-#
-# If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-#
-# If the user enters "q", quit the game.
+# Write the game loop
+while(True):
+    # Get player command
+    player_command = input(CLIENT_PROMPT)
+    main_parser.parse(player_command)
