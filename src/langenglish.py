@@ -9,7 +9,23 @@ from config import *
 
 # - Strings --------------------------------------
 language = {
+    LANG_CONSTANTS: {
+        'north': DIR_NORTH,
+        'south': DIR_SOUTH,
+        'east': DIR_EAST,
+        'west': DIR_WEST,
+        'up': DIR_UP,
+        'down': DIR_DOWN,
+        'self': REFERENCE_SELF,
+        'myself': REFERENCE_SELF,
+    },
     LANG_ALIASES: {
+        'north': COMMAND_MOVE_NORTH,
+        'south': COMMAND_MOVE_SOUTH,
+        'east': COMMAND_MOVE_EAST,
+        'west': COMMAND_MOVE_WEST,
+        'up': COMMAND_MOVE_UP,
+        'down': COMMAND_MOVE_DOWN,
         'move': COMMAND_MOVE,
         'go': COMMAND_MOVE,
         'walk': COMMAND_MOVE,
@@ -25,7 +41,8 @@ language = {
         DIR_UP: 'Up',
         DIR_DOWN: 'Down',
         # Exception messages
-        MESSAGE_ALIAS_UNKNOWN: 'Unknown command "{}"',
+        MESSAGE_ALIAS_UNKNOWN: 'Unknown command: "{}"',
+        MESSAGE_REFERENCE_UNKNOWN: 'Unknown reference: "{}"',
         MESSAGE_EXIT_DISALLOWED: '{} cannot exit {}.',
         MESSAGE_EXIT_DISALLOWED: '{} cannot enter {}.',
         MESSAGE_CANNOT_MOVE: '{} cannot move.',

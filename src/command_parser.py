@@ -16,8 +16,6 @@ class Parser:
         self.player = player
         # Set language
         self.language = LANGUAGE_DEFAULT
-        # Generate verbs
-        # self.verbs = {}
 
     # - Input / Output -------------------------------
     def input(self):
@@ -32,7 +30,7 @@ class Parser:
         self.output(result)
 
     def output(self, message):
-        print('\n'+message+'\n')
+        print(message+'\n')
 
     # - Command Parsing ------------------------------
     def parse(self, command):
@@ -44,14 +42,32 @@ class Parser:
         try:
             verb_code = aliases[verb_alias]
         except KeyError:
-            return self.get_string(MESSAGE_ALIAS_UNKNOWN, command_verb)
+            return self.get_string(MESSAGE_ALIAS_UNKNOWN, verb_alias)
         command_verb = verbs[verb_code]
         # Execute command
         try:
-            command_verb(self.player, *words[1:])
+            references = [self.resolve_reference(word) for word in words[1:]]
+            command_verb(self.player, *references)
         except GAME_PROBLEM as problem:
             return self.get_string(problem.problem_type, *problem.data)
         return "Working"
+    
+    def resolve_reference(self, token):
+        language = languages[self.language]
+        # Attempt to get reference from language constant (like directions)
+        reference = None
+        try:
+            reference = language[LANG_CONSTANTS][token]
+        except KeyError:
+            pass
+        if(reference):
+            # Parse language constant
+            if(reference is REFERENCE_SELF):
+                return self.player
+            return reference
+        # Attempt to get reference from environment
+        # Raise an exception if token cannot be referenced
+        raise GAME_PROBLEM(MESSAGE_REFERENCE_UNKNOWN, token)
 
     # - String Formatting ----------------------------
     def get_string(self, string_code, *args):
@@ -99,3 +115,9 @@ class Verb:
 verbs = {}
 
 Verb(COMMAND_MOVE, lambda player, *args: player.move(*args))
+Verb(COMMAND_MOVE_NORTH, lambda player, *args: player.move(DIR_NORTH, *args))
+Verb(COMMAND_MOVE_SOUTH, lambda player, *args: player.move(DIR_SOUTH, *args))
+Verb(COMMAND_MOVE_EAST, lambda player, *args: player.move(DIR_EAST, *args))
+Verb(COMMAND_MOVE_WEST, lambda player, *args: player.move(DIR_WEST, *args))
+Verb(COMMAND_MOVE_UP, lambda player, *args: player.move(DIR_UP, *args))
+Verb(COMMAND_MOVE_DOWN, lambda player, *args: player.move(DIR_DOWN, *args))
