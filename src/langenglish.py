@@ -9,13 +9,13 @@ from config import *
 
 # - Strings --------------------------------------
 messages = {
-    CLIENT_PROMPT: 'Command >>>',
+    CLIENT_PROMPT: 'Command:: ',
     # Game Problems (exception messages)
     MESSAGE_EXIT_DISALLOWED: '{} cannot exit {}.',
     MESSAGE_EXIT_DISALLOWED: '{} cannot enter {}.',
     MESSAGE_CANNOT_MOVE: '{} cannot move.',
     MESSAGE_NO_EXIT: 'There is no exit in the direction of {}.',
-    MESSAGE_STRING_NOT_FOUND: '[string not found]',
+    MESSAGE_STRING_NOT_FOUND: '[string not found: {}]',
     # Place names and descriptions
     NAME_PLACE_OUTSIDE: 'Outside Cave Entrance',
     NAME_PLACE_FOYER: 'Foyer',

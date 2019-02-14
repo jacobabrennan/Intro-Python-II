@@ -10,12 +10,12 @@ LANGUAGE_ENGLISH = 'English'
 LANGUAGE_DEFAULT = LANGUAGE_ENGLISH
 
 # - Movement -------------------------------------
-DIRECTION_NORTH = 1
-DIRECTION_SOUTH = 2
-DIRECTION_EAST = 4
-DIRECTION_WEST = 8
-DIRECTION_UP = 16
-DIRECTION_DOWN = 32
+DIR_NORTH = 1
+DIR_SOUTH = 2
+DIR_EAST = 4
+DIR_WEST = 8
+DIR_UP = 16
+DIR_DOWN = 32
 
 # - Commands -------------------------------------
 COMMAND_EXIT = 33
@@ -57,9 +57,28 @@ DESCRIPTION_PLACE_TREASURE = _STRING_CODE_GENERATOR()
 DESCRIPTION_ITEM_DEFAULT = _STRING_CODE_GENERATOR()
 
 
-# = Problems (exceptions) =====================================================
+# = Utilities =================================================================
 
+# - Problems (exceptions) ------------------------
 class GAME_PROBLEM(Exception):
     def __init__(self, problem_type, *args):
         self.problem_type = problem_type
         self.data = args
+
+
+# - Math -----------------------------------------
+def DIR_FLIP(direction):
+    flip_dir = 0
+    if(direction & DIR_NORTH):
+        flip_dir |= DIR_SOUTH
+    if(direction & DIR_SOUTH):
+        flip_dir |= DIR_NORTH
+    if(direction & DIR_EAST):
+        flip_dir |= DIR_WEST
+    if(direction & DIR_WEST):
+        flip_dir |= DIR_EAST
+    if(direction & DIR_UP):
+        flip_dir |= DIR_DOWN
+    if(direction & DIR_DOWN):
+        flip_dir |= DIR_UP
+    return flip_dir

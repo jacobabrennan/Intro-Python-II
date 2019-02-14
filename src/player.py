@@ -12,7 +12,7 @@ import contents
 
 
 # - Initialization -------------------------------
-class Player(contents.containable):
+class Player(contents.Containable):
 
     # - Movement -------------------------------------
     def move(self, direction):

@@ -22,7 +22,7 @@ class Room(contents.Container):
         self.exits = {}
 
     # - Movement -------------------------------------
-    def add_exit(room, direction):
+    def add_exit(self, room, direction):
         self.exits[direction] = room
 
     def get_exit(self, direction):
