@@ -43,6 +43,8 @@ language = {
         # Exception messages
         MESSAGE_ALIAS_UNKNOWN: 'Unknown command: "{}"',
         MESSAGE_REFERENCE_UNKNOWN: 'Unknown reference: "{}"',
+        MESSAGE_ARGUMENTS_MANY: 'Too much information provided to "{}"',
+        MESSAGE_ARGUMENTS_FEW: 'Not enough information provided to "{}"',
         MESSAGE_EXIT_DISALLOWED: '{} cannot exit {}.',
         MESSAGE_EXIT_DISALLOWED: '{} cannot enter {}.',
         MESSAGE_CANNOT_MOVE: '{} cannot move.',

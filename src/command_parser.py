@@ -4,6 +4,7 @@
 
 # - Dependencies ---------------------------------
 # Language Modules
+from inspect import signature
 # Game Modules
 from config import *
 from language import languages
@@ -36,7 +37,7 @@ class Parser:
     def parse(self, command):
         # Split command into words
         words = command.lower().split(' ')
-        verb_alias = words[0]
+        verb_alias = words.pop(0)
         # Retrieve verb by alias
         aliases = languages[self.language][LANG_ALIASES]
         try:
@@ -44,9 +45,15 @@ class Parser:
         except KeyError:
             return self.get_string(MESSAGE_ALIAS_UNKNOWN, verb_alias)
         command_verb = verbs[verb_code]
+        # Check if arguments match verb signature
+        needed_args = len(signature(command_verb).parameters) - 1  # player
+        if(needed_args < len(words)):
+            return self.get_string(MESSAGE_ARGUMENTS_MANY, verb_alias)
+        elif(needed_args > len(words)):
+            return self.get_string(MESSAGE_ARGUMENTS_FEW, verb_alias)
         # Execute command
         try:
-            references = [self.resolve_reference(word) for word in words[1:]]
+            references = [self.resolve_reference(word) for word in words]
             command_verb(self.player, *references)
         except GAME_PROBLEM as problem:
             return self.get_string(problem.problem_type, *problem.data)
@@ -114,10 +121,10 @@ class Verb:
 
 verbs = {}
 
-Verb(COMMAND_MOVE, lambda player, *args: player.move(*args))
-Verb(COMMAND_MOVE_NORTH, lambda player, *args: player.move(DIR_NORTH, *args))
-Verb(COMMAND_MOVE_SOUTH, lambda player, *args: player.move(DIR_SOUTH, *args))
-Verb(COMMAND_MOVE_EAST, lambda player, *args: player.move(DIR_EAST, *args))
-Verb(COMMAND_MOVE_WEST, lambda player, *args: player.move(DIR_WEST, *args))
-Verb(COMMAND_MOVE_UP, lambda player, *args: player.move(DIR_UP, *args))
-Verb(COMMAND_MOVE_DOWN, lambda player, *args: player.move(DIR_DOWN, *args))
+Verb(COMMAND_MOVE, lambda player, direction: player.move(direction))
+Verb(COMMAND_MOVE_NORTH, lambda player: player.move(DIR_NORTH))
+Verb(COMMAND_MOVE_SOUTH, lambda player: player.move(DIR_SOUTH))
+Verb(COMMAND_MOVE_EAST, lambda player: player.move(DIR_EAST))
+Verb(COMMAND_MOVE_WEST, lambda player: player.move(DIR_WEST))
+Verb(COMMAND_MOVE_UP, lambda player: player.move(DIR_UP))
+Verb(COMMAND_MOVE_DOWN, lambda player: player.move(DIR_DOWN))
